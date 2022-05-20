@@ -2,11 +2,17 @@
 Test for models
 """
 from decimal import Decimal
+from getpass import getuser
 
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
 from core import models
+
+
+def create_user(email='mail@example.com', password='password'):
+    """ Create a new user for tests """
+    return get_user_model().objects.create_user(email, password)
 
 
 class ModelTest(TestCase):
@@ -70,3 +76,10 @@ class ModelTest(TestCase):
         )
 
         self.assertEqual(str(recipe), recipe.title)
+
+    def test_create_tag(self):
+        """ Test creating a tag is sucessful """
+        user = create_user()
+        tag = models.Tag.objects.create(user=user, name='Taggerino')
+
+        self.assertEqual(str(tag), tag.name)
