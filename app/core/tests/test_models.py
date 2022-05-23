@@ -3,6 +3,7 @@ Test for models
 """
 from decimal import Decimal
 from getpass import getuser
+from venv import create
 
 from django.test import TestCase
 from django.contrib.auth import get_user_model
@@ -83,3 +84,12 @@ class ModelTest(TestCase):
         tag = models.Tag.objects.create(user=user, name='Taggerino')
 
         self.assertEqual(str(tag), tag.name)
+
+    def test_create_ingredient(self):
+        """ Test creating an ingredient is succesful """
+        user = create_user()
+        ingredient = models.Ingredient.objects.create(
+            user=user,
+            name='Oregano'
+        )
+        self.assertEqual(str(ingredient), ingredient.name)
