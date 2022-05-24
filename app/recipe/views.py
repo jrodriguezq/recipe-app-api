@@ -6,17 +6,19 @@ from drf_spectacular.utils import (
     extend_schema,
     OpenApiParameter,
     OpenApiTypes)
-from rest_framework import (viewsets,
-                            mixins,
-                            status)
+from rest_framework import (
+    viewsets,
+    mixins,
+    status)
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from core.models import (Recipe,
-                         Tag,
-                         Ingredient)
+from core.models import (
+    Recipe,
+    Tag,
+    Ingredient)
 from recipe import serializers
 
 
@@ -38,12 +40,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
         queryset = self.queryset
         if tags:
             tags_ids = self._params_to_ints(tags)
-            queryset = queryset.filter(tags__ids__in=tags_ids)
+            queryset = queryset.filter(tags__id__in=tags_ids)
         if ingredients:
             ingredients_ids = self._params_to_ints(ingredients)
-            queryset = queryset.filter(ingredients__ids__in=ingredients_ids)
+            queryset = queryset.filter(ingredients__id__in=ingredients_ids)
 
-        return queryset.filter(user=self.request.user).order_by('-id').distinct()
+        return queryset.filter(
+            user=self.request.user
+        ).order_by('-id').distinct()
 
     def get_serializer_class(self):
         """ Retrieve the serializer class for request """
